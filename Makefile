@@ -16,7 +16,7 @@ EXE =
 VPATH=src $(wildcard src/cpu/*)
 
 # compiler, linker and utilities
-MD = @mkdir
+MD = @mkdir -p
 RM = rm -f
 CC  = arm-linux-gnueabihf-gcc
 CPP = arm-linux-gnueabihf-g++
