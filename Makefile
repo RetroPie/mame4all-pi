@@ -35,7 +35,7 @@ CFLAGS = -fsigned-char $(DEVLIBS) \
 	-I$(SDKSTAGE)/opt/vc/include -I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
 	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
 	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include \
-	-march=armv6 -mfpu=vfp -mfloat-abi=hard \
+	-march=armv6j -mfpu=vfp -mfloat-abi=hard \
 	-O3 -ffast-math -fomit-frame-pointer -fstrict-aliasing \
 	-mstructure-size-boundary=32 -fexpensive-optimizations \
 	-fweb -frename-registers -falign-functions=16 -falign-loops -falign-labels -falign-jumps \
