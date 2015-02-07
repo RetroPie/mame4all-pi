@@ -18,10 +18,10 @@ VPATH=src $(wildcard src/cpu/*)
 # compiler, linker and utilities
 MD = @mkdir -p
 RM = rm -f
-CC  = arm-linux-gnueabihf-gcc
-CPP = arm-linux-gnueabihf-g++
+CC  = gcc
+CPP = g++
 AS  = as
-LD  = arm-linux-gnueabihf-g++
+LD  = ld
 STRIP = strip
 
 EMULATOR = $(TARGET)$(EXE)
