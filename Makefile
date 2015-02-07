@@ -21,7 +21,7 @@ RM = rm -f
 CC  = gcc
 CPP = g++
 AS  = as
-LD  = ld
+LD  = gcc
 STRIP = strip
 
 EMULATOR = $(TARGET)$(EXE)
