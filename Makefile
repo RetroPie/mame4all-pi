@@ -40,7 +40,7 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 
 LDFLAGS = $(CFLAGS)
 
-LIBS = -lm -lpthread -lSDL -L$(SDKSTAGE)/opt/vc/lib -lbcm_host -lGLESv2 -lEGL -lglib-2.0 -lrt -lasound
+LIBS = -lm -lpthread -lSDL -L$(SDKSTAGE)/opt/vc/lib -lbcm_host -lGLESv2 -lEGL -lglib-2.0 -lasound -lrt
 
 OBJ = obj_$(TARGET)_$(MAMEOS)
 OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
