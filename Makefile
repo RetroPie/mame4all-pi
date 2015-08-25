@@ -5,6 +5,7 @@ endif
 ifeq ($(PLATFORM),)
 PLATFORM = rpi
 endif
+
 @echo Platform is $(PLATFORM)
 
 # set this the operating system you're building for
@@ -44,18 +45,6 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	-O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
 	-falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant \
 	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow 
-
-##ifeq ($(PLATFORM),rpi2)
-##CFLAGS += -march=armv6j -mfpu=vfp -mfloat-abi=hard \
-	-O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
-	-falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant 
-##endif
-##ifeq ($(PLATFORM),rpi2)
-##CFLAGS += -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard \
-	-O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
-	-falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant 
-##endif
-##CFLAGS += -Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow 
 
 LDFLAGS = $(CFLAGS)
 
