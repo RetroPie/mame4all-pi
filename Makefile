@@ -3,10 +3,8 @@ TARGET = mame
 endif
 
 ifeq ($(PLATFORM),)
-PLATFORM = rpi
+PLATFORM = rpi1
 endif
-
-@echo Platform is $(PLATFORM)
 
 # set this the operating system you're building for
 # (actually you'll probably need your own main makefile anyways)
@@ -55,7 +53,7 @@ OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
 	$(OBJ)/drivers $(OBJ)/machine $(OBJ)/vidhrdw $(OBJ)/sndhrdw \
 	$(OBJ)/zlib
 
-all:	maketree $(EMULATOR)
+all:    print-PLATFORM  maketree $(EMULATOR)
 
 # include the various .mak files
 include src/core.mak
@@ -95,3 +93,5 @@ maketree: $(sort $(OBJDIRS))
 clean:
 	$(RM) -r $(OBJ)
 	$(RM) $(EMULATOR)
+
+print-%: ; @echo $*=$($*)
