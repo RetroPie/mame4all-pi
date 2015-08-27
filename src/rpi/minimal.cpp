@@ -169,9 +169,9 @@ int init_SDL(void)
 				//Allow SDL badly handled axis like PS3
 				if (SDL_JoystickNumAxes(myjoy[i]) > 28)
 				{
-					SDL_JoystickClose(myjoy[i]);
-					myjoy[i]=0;
-					logerror("Error detected invalid joystick/keyboard\n");
+					logerror("Error detected invalid joystick/keyboard. Detected %d axis\n", SDL_JoystickNumAxes(myjoy[i]));
+					//SDL_JoystickClose(myjoy[i]);
+					//myjoy[i]=0;
 				}
 			}
 		}
