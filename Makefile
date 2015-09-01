@@ -39,22 +39,17 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	-I$(SDKSTAGE)/opt/vc/include -I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
 	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
         -I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include
-#       -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard \
-#       -O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
-#       -falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant \
-#       -Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow
 
+# Platform specific
 ifeq ($(PLATFORM),rpi2)
-CFLAGS += -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard \
-        -O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
-        -falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant
+CFLAGS += -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
 else
-CFLAGS += -march=armv6j -mfpu=vfp -mfloat-abi=hard \
-        -O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
-        -falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant
+CFLAGS += -march=armv6j -mfpu=vfp -mfloat-abi=hard
 endif
 
-CFLAGS += -Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow
+CFLAGS += -O3 -ffast-math -mstructure-size-boundary=32 -fweb -frename-registers \
+	-falign-functions=16 -fno-common -fno-builtin -fsingle-precision-constant \
+	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow
 
 LDFLAGS = $(CFLAGS)
 
