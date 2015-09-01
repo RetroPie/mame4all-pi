@@ -160,20 +160,6 @@ int init_SDL(void)
 		
 		for(i=0;i<SDL_NumJoysticks();i++) {	
 			myjoy[i]=SDL_JoystickOpen(i);
-
-			//Check for valid joystick, some keyboards
-			//aren't SDL compatible
-			if(myjoy[i])
-			{
-				//Invalid detected keyboards show 30 axis
-				//Allow SDL badly handled axis like PS3
-				if (SDL_JoystickNumAxes(myjoy[i]) > 28)
-				{
-					SDL_JoystickClose(myjoy[i]);
-					myjoy[i]=0;
-					logerror("Error detected invalid joystick/keyboard\n");
-				}
-			}
 		}
 		if(myjoy[0]) 
 			logerror("Found %d joysticks\n",SDL_NumJoysticks());
