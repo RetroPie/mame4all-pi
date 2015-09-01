@@ -2,10 +2,14 @@ ifeq ($(TARGET),)
 TARGET = mame
 endif
 
+ifeq ($(PLATFORM),)
+PLATFORM = rpi1
+endif
+
 # set this the operating system you're building for
 # (actually you'll probably need your own main makefile anyways)
 # MAMEOS = msdos
-#MAMEOS = gp2x
+# MAMEOS = gp2x
 MAMEOS = rpi
 
 # extension for executables
@@ -34,9 +38,18 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	-I/usr/include/SDL \
 	-I$(SDKSTAGE)/opt/vc/include -I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
 	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
-	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include \
-	-O3 -ffast-math -fno-builtin -fsingle-precision-constant \
-	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow 
+	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include
+
+# Platform specific
+ifeq ($(PLATFORM),rpi2)
+CFLAGS += -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
+else
+CFLAGS += -march=armv6j -mfpu=vfp -mfloat-abi=hard
+endif
+
+CFLAGS += -O3 -ffast-math -fno-builtin -fsingle-precision-constant \
+	-fno-common -mstructure-size-boundary=32 -fweb -frename-registers \
+	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow
 
 LDFLAGS = $(CFLAGS)
 
@@ -47,7 +60,7 @@ OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
 	$(OBJ)/drivers $(OBJ)/machine $(OBJ)/vidhrdw $(OBJ)/sndhrdw \
 	$(OBJ)/zlib
 
-all:	maketree $(EMULATOR)
+all:    print-PLATFORM  maketree $(EMULATOR)
 
 # include the various .mak files
 include src/core.mak
@@ -87,3 +100,5 @@ maketree: $(sort $(OBJDIRS))
 clean:
 	$(RM) -r $(OBJ)
 	$(RM) $(EMULATOR)
+
+print-%: ; @echo $*=$($*)
