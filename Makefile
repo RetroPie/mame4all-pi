@@ -36,7 +36,8 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
 	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include \
 	-O3 -ffast-math -fno-builtin -fsingle-precision-constant \
-	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow 
+	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow \
+	-Wno-narrowing
 
 LDFLAGS = $(CFLAGS)
 
