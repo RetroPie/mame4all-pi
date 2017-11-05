@@ -672,8 +672,32 @@ extern SDL_Joystick* myjoy[4];
 
 int is_joy_axis_pressed (int axis, int dir, int joynum)
 {
-	if (!myjoy[joynum]) return 0;
+	if (joynum > 3 || !myjoy[joynum]) return 0;
+	int hats = SDL_JoystickNumHats(myjoy[joynum]);
+	if (hats * 2 > axis) {
+		// Each hat has two axis
+		Uint8 hat = SDL_JoystickGetHat(myjoy[joynum], axis / 2);
+		int sub_axis = axis & 1;
 
+		/* Normal controls */
+		if (dir == 1) {
+			if (sub_axis == 0) {
+				return (hat & SDL_HAT_LEFT) != 0;
+			}
+			return (hat & SDL_HAT_UP) != 0;
+		} else if (dir == 2) { //right down
+			if (sub_axis == 0) {
+				return (hat & SDL_HAT_RIGHT) != 0;
+			}
+			return (hat & SDL_HAT_DOWN) != 0;
+		}
+
+		return 0;
+	}
+
+	/* Ajust for hat axis */
+	axis -= hats * 2;
+	
 	/* Normal controls */
 	if(dir == 1) { //left up
 		if(SDL_JoystickGetAxis(myjoy[joynum], axis) < -12000) return true;	
