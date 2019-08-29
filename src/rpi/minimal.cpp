@@ -16,6 +16,7 @@ static SDL_Surface* sdlscreen = NULL;
 unsigned long 			gp2x_dev[3];
 unsigned char 			*gp2x_screen8;
 unsigned short 			*gp2x_screen15;
+void                    *rpi_screen;
 volatile unsigned short 	gp2x_palette[512];
 int 				rotate_controls=0;
 
@@ -37,6 +38,7 @@ void gp2x_video_flip_single(struct osd_bitmap *bitmap)
 extern void gles2_palette_changed();
 
 void gles2_palette_changed();
+void (*gles2_draw)(void *screen, int width, int height);
 
 void gp2x_video_setpalette(void)
 {
@@ -216,6 +218,7 @@ void gp2x_deinit(void)
 	if(gp2x_screen15) free(gp2x_screen15);
 	gp2x_screen8=0;
 	gp2x_screen15=0;
+	rpi_screen=0;
 }
 
 static uint32_t display_adj_width, display_adj_height;		//display size minus border
@@ -224,7 +227,7 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 {
 
 	int ret;
-	uint32_t display_width, display_height;
+	uint32_t display_width, display_height, surface_size;
 	uint32_t display_x=0, display_y=0;
 	float display_ratio,game_ratio;
 
@@ -233,9 +236,25 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 
 	surface_width = width;
 	surface_height = height;
-
-	gp2x_screen8=(unsigned char *) calloc(1, width*height);
-	gp2x_screen15=(unsigned short *) calloc(1, width*height*2);
+	
+	surface_size = width*height;
+	
+	gp2x_screen8=0;
+	gp2x_screen15=0;
+	
+    if (bitmap->depth == 8)
+    {
+    	gp2x_screen8=(unsigned char *) calloc(1, surface_size);
+    	rpi_screen=gp2x_screen8;
+    	gles2_draw = gles2_draw_8;
+    }
+    else
+    {
+        surface_size = surface_size * 2;
+    	gp2x_screen15=(unsigned short *) calloc(1, surface_size);
+    	rpi_screen=gp2x_screen15;
+    	gles2_draw = gles2_draw_16;
+    }
 
 	// get an EGL display connection
 	display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
@@ -359,14 +378,16 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 		gles2_create(width, height, width, height, bitmap->depth);
 	else
 		gles2_create(display_adj_width, display_adj_height, width, height, bitmap->depth);
+
+	update_throttle();
 }
 
-void gles2_draw(void * screen, int width, int height, int depth);
 extern EGLDisplay display;
 extern EGLSurface surface;
 
-void DisplayScreen(struct osd_bitmap *bitmap)
+void update_throttle()
 {
+    // updated from video.cpp
 	extern int throttle;
 	static int save_throttle=0;
 
@@ -379,12 +400,12 @@ void DisplayScreen(struct osd_bitmap *bitmap)
 
 		save_throttle=throttle;
 	}
+}
 
+void DisplayScreen(struct osd_bitmap *bitmap)
+{
     //Draw to the screen
-	if (bitmap->depth == 8)
-    	gles2_draw(gp2x_screen8, surface_width, surface_height, bitmap->depth);
-	else
-    	gles2_draw(gp2x_screen15, surface_width, surface_height, bitmap->depth);
+  	gles2_draw(rpi_screen, surface_width, surface_height);
     eglSwapBuffers(display, surface);
 }
 

@@ -78,4 +78,10 @@ extern void gp2x_frontend_deinit(void);
 extern void deinit_SDL(void);
 extern int init_SDL(void);
 
+void update_throttle();
+
+// gl config on boot
+void gles2_draw_8(void *screen, int width, int height);
+void gles2_draw_16(void *screen, int width, int height);
+
 #endif

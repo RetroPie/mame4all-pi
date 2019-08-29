@@ -23,6 +23,8 @@ force_stereo=no
 # Anti-alias the display?
 display_smooth_stretch=yes
 display_border=0
+# Do not fit and get pixel perfect (x1)
+display_integer=1
 # display effect postprocessing: 0 none, 1 scanlines
 display_effect=0
 
