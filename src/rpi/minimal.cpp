@@ -25,14 +25,9 @@ static int surface_height;
 
 #define MAX_SAMPLE_RATE (44100*2)
 
-void gp2x_video_flip(struct osd_bitmap *bitmap)
+void gp2x_video_flip(void)
 {
-    DisplayScreen(bitmap);
-}
-
-void gp2x_video_flip_single(struct osd_bitmap *bitmap)
-{
-    DisplayScreen(bitmap);
+    DisplayScreen();
 }
 
 extern void gles2_palette_changed();
@@ -226,7 +221,6 @@ static uint32_t display_adj_width, display_adj_height;		//display size minus bor
 void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height)
 {
 
-	int ret;
 	uint32_t display_width, display_height, surface_size;
 	uint32_t display_x=0, display_y=0;
 	float display_ratio,game_ratio;
@@ -385,7 +379,7 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 extern EGLDisplay display;
 extern EGLSurface surface;
 
-void update_throttle()
+void update_throttle(void)
 {
     // updated from video.cpp
 	extern int throttle;
@@ -402,7 +396,7 @@ void update_throttle()
 	}
 }
 
-void DisplayScreen(struct osd_bitmap *bitmap)
+void DisplayScreen(void)
 {
     //Draw to the screen
   	gles2_draw(rpi_screen, surface_width, surface_height);

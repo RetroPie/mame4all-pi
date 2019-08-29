@@ -39,7 +39,7 @@ void blitscreen_dirty1_color8(struct osd_bitmap *bitmap)
         }
         while (y); 
 
-    gp2x_video_flip(bitmap);
+    gp2x_video_flip();
 }
 
 void blitscreen_dirty0_color8(struct osd_bitmap *bitmap)
@@ -59,7 +59,7 @@ void blitscreen_dirty0_color8(struct osd_bitmap *bitmap)
         }
         while (y);  
 
-    gp2x_video_flip(bitmap);
+    gp2x_video_flip();
 }
 
 void blitscreen_dirty1_palettized16(struct osd_bitmap *bitmap)
@@ -100,7 +100,7 @@ void blitscreen_dirty1_palettized16(struct osd_bitmap *bitmap)
 		address += 16 * gfx_width;
 	}
 
-	gp2x_video_flip(bitmap);
+	gp2x_video_flip();
 }
 
 void blitscreen_dirty0_palettized16(struct osd_bitmap *bitmap)
@@ -121,7 +121,7 @@ void blitscreen_dirty0_palettized16(struct osd_bitmap *bitmap)
 		address+=gfx_width;
 	}
 	
-	gp2x_video_flip(bitmap);
+	gp2x_video_flip();
 }
 
 void blitscreen_dirty1_color16(struct osd_bitmap *bitmap)
@@ -162,7 +162,7 @@ void blitscreen_dirty1_color16(struct osd_bitmap *bitmap)
 		address += 16 * gfx_width;
 	}
 
-	gp2x_video_flip(bitmap);
+	gp2x_video_flip();
 }
 
 void blitscreen_dirty0_color16(struct osd_bitmap *bitmap)
@@ -183,5 +183,5 @@ void blitscreen_dirty0_color16(struct osd_bitmap *bitmap)
 		address+=gfx_width;
 	}
 	
-	gp2x_video_flip(bitmap);
+	gp2x_video_flip();
 }
