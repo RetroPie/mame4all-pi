@@ -54,8 +54,7 @@ extern unsigned short 		*gp2x_screen15;
 extern void gp2x_init(int tickspersecond, int bpp, int rate, int bits, int stereo, int hz, int caller);
 extern void gp2x_deinit(void);
 extern void gp2x_timer_delay(unsigned long ticks);
-extern void gp2x_video_flip(struct osd_bitmap *bitmap);
-extern void gp2x_video_flip_single(void);
+extern void gp2x_video_flip(void);
 extern void gp2x_video_setpalette(void);
 extern void gp2x_joystick_clear(void);
 extern unsigned long gp2x_joystick_read(void);
@@ -69,7 +68,7 @@ extern void gp2x_printf_init(void);
 extern void gp2x_gamelist_text_out(int x, int y, char *eltexto, int color);
 extern void gp2x_gamelist_text_out_fmt(int x, int y, char* fmt, ...);
 
-extern void DisplayScreen(struct osd_bitmap *bitmap);
+extern void DisplayScreen();
 extern void FE_DisplayScreen(void);
 
 extern void gp2x_frontend_init(void);
@@ -77,5 +76,11 @@ extern void gp2x_frontend_deinit(void);
 
 extern void deinit_SDL(void);
 extern int init_SDL(void);
+
+void update_throttle(void);
+
+// gl config on boot
+void gles2_draw_8(void *screen, int width, int height);
+void gles2_draw_16(void *screen, int width, int height);
 
 #endif

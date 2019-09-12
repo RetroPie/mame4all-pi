@@ -105,6 +105,7 @@ struct GameOptions {
 	int display_border;
 	int display_smooth_stretch;
 	int display_effect;
+	int display_integer;
 };
 
 extern struct GameOptions options;

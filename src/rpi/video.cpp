@@ -1076,6 +1076,7 @@ void osd_update_video_and_audio(struct osd_bitmap *bitmap)
 	if (input_ui_pressed(IPT_UI_THROTTLE))
 	{
 		throttle ^= 1;
+		update_throttle();
 	}
 
 	frameskip_counter = (frameskip_counter + 1) % FRAMESKIP_LEVELS;

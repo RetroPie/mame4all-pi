@@ -323,17 +323,32 @@ void gles2_create(int display_width, int display_height, int bitmap_width, int b
 
 	dis_width = display_width;
 	dis_height = display_height;
+	
+    if(options.display_integer)
+    {
+	    // sky gpi
+	    sx = (float)bitmap_width/(float)display_width;
+	    sy = (float)bitmap_height/(float)display_height;
 
-	// Screen aspect ratio adjustment
-	float a = (float)display_width/(float)display_height;
-	float a0 = (float)bitmap_width/(float)bitmap_height;
-	if(a > a0)
-		sx = a0/a;
+	    //Set the dimensions for displaying the texture(bitmap) on the screen
+	    SetOrtho(proj, -0.5f, +0.5f, +0.5f, -0.5f, -1.0f, 1.0f, sx, sy);
+	    
+	    printf("integer enabled - %ux%u@%u : %ux%u (x:%f y:%f)\n", 
+	        display_width, display_height, depth, bitmap_width, bitmap_height, sx, sy);
+	}
 	else
-		sy = a/a0;
+	{
+	    // Screen aspect ratio adjustment
+	    float a = (float)display_width/(float)display_height;
+	    float a0 = (float)bitmap_width/(float)bitmap_height;
+	    if(a > a0)
+		    sx = a0/a;
+	    else
+		    sy = a/a0;
 
-	//Set the dimensions for displaying the texture(bitmap) on the screen
-	SetOrtho(proj, -0.5f, +0.5f, +0.5f, -0.5f, -1.0f, 1.0f, sx*op_zoom, sy*op_zoom);
+	    //Set the dimensions for displaying the texture(bitmap) on the screen
+	    SetOrtho(proj, -0.5f, +0.5f, +0.5f, -0.5f, -1.0f, 1.0f, sx*op_zoom, sy*op_zoom);
+	} 
 
     palette_changed = 1;
 }
@@ -396,7 +411,7 @@ static void gles2_DrawQuad_16(const ShaderInfo *sh, GLuint p_textures[2])
 
 extern volatile unsigned short gp2x_palette[512];
 
-void gles2_draw(void *screen, int width, int height, int depth)
+void gles2_draw_8(void *screen, int width, int height)
 {
 	if(!shader.program) return;
 
@@ -407,7 +422,7 @@ void gles2_draw(void *screen, int width, int height, int depth)
 	glUseProgram(shader.program); SHOW_ERROR
 	glUniformMatrix4fv(shader.u_vp_matrix, 1, GL_FALSE, &proj[0][0]); SHOW_ERROR
 
-	if(depth == 8 && palette_changed)
+	if(palette_changed)
     {
         glActiveTexture(GL_TEXTURE1); SHOW_ERROR
         glBindTexture(GL_TEXTURE_2D, textures[1]); SHOW_ERROR
@@ -417,17 +432,30 @@ void gles2_draw(void *screen, int width, int height, int depth)
 
 	glActiveTexture(GL_TEXTURE0); SHOW_ERROR
 	glBindTexture(GL_TEXTURE_2D, textures[0]); SHOW_ERROR
-	
-	if(depth == 8)
-	{
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_LUMINANCE, GL_UNSIGNED_BYTE, (unsigned char*) screen); SHOW_ERROR
-		gles2_DrawQuad_8(&shader, textures);
-	}
-	else
-	{
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (unsigned short*) screen); SHOW_ERROR
-		gles2_DrawQuad_16(&shader, textures);
-	}
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_LUMINANCE, GL_UNSIGNED_BYTE, (unsigned char*) screen); SHOW_ERROR
+	gles2_DrawQuad_8(&shader, textures);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0); SHOW_ERROR
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); SHOW_ERROR
+}
+
+void gles2_draw_16(void *screen, int width, int height)
+{
+	if(!shader.program) return;
+
+	glClear(GL_COLOR_BUFFER_BIT); SHOW_ERROR
+	glViewport(0, 0, dis_width, dis_height); SHOW_ERROR
+
+	glDisable(GL_BLEND); SHOW_ERROR
+	glUseProgram(shader.program); SHOW_ERROR
+	glUniformMatrix4fv(shader.u_vp_matrix, 1, GL_FALSE, &proj[0][0]); SHOW_ERROR
+
+	glActiveTexture(GL_TEXTURE0); SHOW_ERROR
+	glBindTexture(GL_TEXTURE_2D, textures[0]); SHOW_ERROR
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, (unsigned short*) screen); SHOW_ERROR
+	gles2_DrawQuad_16(&shader, textures);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); SHOW_ERROR
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); SHOW_ERROR
