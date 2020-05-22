@@ -13,6 +13,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <linux/limits.h>
+#include <SDL.h>
 #include "stdarg.h"
 #include "string.h"
 #include "minimal.h"
@@ -99,6 +100,16 @@ int fuzzycmp (const char *s, const char *l)
 }
 
 
+
+void my_handler(int sig)
+{
+	
+	printf("[trngaje] Caught signal %d\n", sig);
+	SDL_Quit();
+	gp2x_frontend_deinit();
+	exit(1); 
+}
+
 int main (int argc, char **argv)
 {
 	int res, i, j = 0, game_index;
@@ -121,6 +132,8 @@ int main (int argc, char **argv)
 
 	kiosk_mode=0;
 	printf("[trngaje] rpi.cpp:main:%s\n", argv[0]);
+
+	signal(SIGINT, my_handler);
 
     if (realpath(argv[0], abspath) == NULL)
 	{

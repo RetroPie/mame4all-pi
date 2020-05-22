@@ -248,7 +248,8 @@ int init_SDL(void)
 #endif
     //Initialise dispmanx
     //bcm_host_init();
-    
+    go2_display = go2_display_create();
+	
 	//Clean exits, hopefully!
 	atexit(exitfunc);
     
@@ -269,6 +270,12 @@ void deinit_SDL(void)
 		// Once finished with OpenGL functions, the SDL_GLContext can be deleted.
 		SDL_GL_DeleteContext(glcontext);  
 	}
+
+	if (go2_display != NULL)
+	{
+		go2_display_destroy(go2_display);
+		go2_display = NULL;
+	} 
 	
     SDL_Quit();
     
@@ -287,14 +294,20 @@ void gp2x_deinit(void)
     eglDestroySurface( display, surface );
     eglDestroyContext( display, context );
     eglTerminate( display );
-#if 0
 
+#if 1
 	if(gp2x_screen8) free(gp2x_screen8);
 	if(gp2x_screen15) free(gp2x_screen15);
 	gp2x_screen8=0;
 	gp2x_screen15=0;
 	rpi_screen=0;
-#endif
+#endif	
+
+	if (go2_surface != NULL)
+	{
+		go2_surface_destroy(go2_surface);
+		go2_surface = NULL;
+	}
 
 	if (go2_context3D != NULL)
 	{
@@ -308,12 +321,13 @@ void gp2x_deinit(void)
 		go2_presenter = NULL;
 	}
 
-
+#if 0
 	if (go2_display != NULL)
 	{
 		go2_display_destroy(go2_display);
 		go2_display = NULL;
-	} 
+	}
+#endif	
 }
 
 static uint32_t display_adj_width, display_adj_height;		//display size minus border
@@ -389,10 +403,7 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
     go2_surface->format = DRM_FORMAT_RGB565;	
 	
 #endif	
-	//gp2x_screen15 = (unsigned short *)go2_surface_map(go2_surface);
-	//gp2x_screen8=(unsigned char *)go2_surface_map(go2_surface);	
-	
-	
+
 	
 	surface_width = width;
 	surface_height = height;
@@ -402,7 +413,7 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 	surface = go2_context3D->eglSurface;
 	display = go2_context3D->eglDisplay;
 	context = go2_context3D->eglContext;
-#if 1	
+	
 	gp2x_screen8=0;
 	gp2x_screen15=0;
 	
@@ -419,20 +430,7 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
     	rpi_screen=gp2x_screen15;
     	gles2_draw = gles2_draw_16;
     }
-#else
-	if (bitmap->depth == 8)
-	{
-		rpi_screen=gp2x_screen8;
-    	gles2_draw = gles2_draw_8;
-	}
-	else
-	{
-        surface_size = surface_size * 2;
-    	//gp2x_screen15=(unsigned short *) calloc(1, surface_size);
-    	rpi_screen=gp2x_screen15;
-    	gles2_draw = gles2_draw_16;		
-	}
-#endif
+
 	// get an EGL display connection
 	//display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 	//assert(display != EGL_NO_DISPLAY);
@@ -513,23 +511,8 @@ void gp2x_set_video_mode(struct osd_bitmap *bitmap, int bpp,int width,int height
 	else
 		vc_dispmanx_rect_set( &src_rect, 0, 0, display_adj_width << 16, display_adj_height << 16);
 
-	dispman_display = vc_dispmanx_display_open(0);
-	dispman_update = vc_dispmanx_update_start(0);
-	dispman_element = vc_dispmanx_element_add(dispman_update, dispman_display,
-	  				10, &dst_rect, 0, &src_rect, 
-					DISPMANX_PROTECTION_NONE, NULL, NULL, DISPMANX_NO_ROTATE);
-
-	//Black background surface dimensions
-	vc_dispmanx_rect_set( &dst_rect, 0, 0, display_width, display_height );
-	vc_dispmanx_rect_set( &src_rect, 0, 0, 128 << 16, 128 << 16);
  
-	//Create a blank background for the whole screen, make sure width is divisible by 32!
-	uint32_t crap;
-	resource_bg = vc_dispmanx_resource_create(VC_IMAGE_RGB565, 128, 128, &crap);
-	dispman_element_bg = vc_dispmanx_element_add(  dispman_update, dispman_display,
-	                                      9, &dst_rect, resource_bg, &src_rect,
-	                                      DISPMANX_PROTECTION_NONE, 0, 0,
-	                                      (DISPMANX_TRANSFORM_T) 0 );
+
 
 	nativewindow.element = dispman_element;
 	if (options.display_smooth_stretch) {
@@ -634,7 +617,7 @@ void gp2x_frontend_init(void)
 {
 	printf("[trngaje] gp2x_frontend_init\n");
 	
-	go2_display = go2_display_create();
+	//go2_display = go2_display_create();
     go2_presenter = go2_presenter_create(go2_display, DRM_FORMAT_XRGB8888, 0xff080808);  // ABGR
 
 	go2_context_attributes_t attr;
@@ -657,52 +640,38 @@ void gp2x_frontend_init(void)
 
 
 	go2_surface = go2_surface_create(go2_display, surface_width, surface_height, DRM_FORMAT_RGB565);
-	gp2x_screen15 = (unsigned short *)go2_surface_map(go2_surface);
-	gp2x_screen8=(unsigned char *)go2_surface_map(go2_surface);
+	//gp2x_screen15 = (unsigned short *)go2_surface_map(go2_surface);
+	//gp2x_screen8=(unsigned char *)go2_surface_map(go2_surface);
 	
-#if 0 	
-	int ret;
-        
-	uint32_t display_width, display_height;
-    
-	VC_RECT_T dst_rect;
-	VC_RECT_T src_rect;
-    
-	surface_width = 640;
-	surface_height = 480;
-    
 	gp2x_screen8=0;
 	gp2x_screen15=(unsigned short *) calloc(1, 640*480*2);
 	
-	graphics_get_display_size(0 /* LCD */, &display_width, &display_height);
-    
-	dispman_display = vc_dispmanx_display_open( 0 );
-	assert( dispman_display != 0 );
-        
+#if 0 	
+       
 	// Add border around bitmap for TV
 	display_width -= options.display_border * 2;
 	display_height -= options.display_border * 2;
     
-
-    
-	// setup swapping of double buffers
-	cur_res = resource1;
-	prev_res = resource0;
  #endif     
 }
 
 void gp2x_frontend_deinit(void)
 {
 	printf("[trngaje] gp2x_frontend_deinit++\n");
-	int ret;
-#if 0    
+	//int ret;
    
 	if(gp2x_screen8) free(gp2x_screen8);
 	if(gp2x_screen15) free(gp2x_screen15);
 	gp2x_screen8=0;
-	gp2x_screen15=0;
-#endif   
+	gp2x_screen15=0;  
 
+
+	if (go2_surface != NULL)
+	{
+		go2_surface_destroy(go2_surface);
+		go2_surface = NULL;
+	}
+	
 	if (go2_context3D != NULL)
 	{
 		go2_context_destroy(go2_context3D);
@@ -715,17 +684,29 @@ void gp2x_frontend_deinit(void)
 		go2_presenter = NULL;
 	}
 
-
+#if 0
 	if (go2_display != NULL)
 	{
 		go2_display_destroy(go2_display);
 		go2_display = NULL;
-	} 
+	}
+#endif	
 }
 
 void FE_DisplayScreen(void)
 {
 	printf("[trngaje] FE_DisplayScreen++\n");
+	
+	uint16_t* src = (uint16_t *)gp2x_screen15;
+	uint16_t* dst = (uint16_t *)go2_surface_map(go2_surface);
+	for (int i=0; i< (surface_width * surface_height); i++)
+	{
+		*dst = (uint16_t) *src;
+		dst++;
+		src++;
+	}	
+		
+	
 #if 1	
 	//go2_surface_t* gles_surface = go2_context_surface_lock(go2_context3D);
 	

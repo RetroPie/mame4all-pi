@@ -492,13 +492,13 @@ static void select_game(char *emu, char *game)
 		}
 
 		int updown=0;
-		if(is_joy_axis_pressed (joyaxis_UD, 1, 0)) {last_game_selected--; updown=1;};
-		if(is_joy_axis_pressed (joyaxis_UD, 2, 0)) {last_game_selected++; updown=1;};
+		if(is_joy_axis_pressed (joyaxis_UD, 1, 0) || is_joy_button_pressed(6, ExKey1)) {last_game_selected--; updown=1;};
+		if(is_joy_axis_pressed (joyaxis_UD, 2, 0) || is_joy_button_pressed(7, ExKey1)) {last_game_selected++; updown=1;};
 		
 		// Stop diagonals on game selection
 		if(!updown) {
-			if(is_joy_axis_pressed (joyaxis_LR, 1, 0)) last_game_selected-=21;
-			if(is_joy_axis_pressed (joyaxis_LR, 2, 0)) last_game_selected+=21;
+			if(is_joy_axis_pressed (joyaxis_LR, 1, 0) || is_joy_button_pressed(8, ExKey1)) last_game_selected-=21;
+			if(is_joy_axis_pressed (joyaxis_LR, 2, 0) || is_joy_button_pressed(9, ExKey1)) last_game_selected+=21;
 		}
 
 
