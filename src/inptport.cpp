@@ -130,38 +130,93 @@ char ipdn_defaultstrings[][MAX_DEFSTR_LEN] =
 	"Unknown"
 };
 
+/*
+F1 : 10
+F2 : 11
+F3 : 12
+F4 : 13
+F5 : 14
+F6 : 15
+A:1
+B:0
+X:2
+Y:3
+lshoulder:4
+rshoulder:5
+left : 8
+right : 9
+up : 6
+down : 7
+axes 0, 1 analog value
+select : 12, start : 13
+*/
+
 struct ipd inputport_defaults[] =
 {
+#ifdef OGA_TRNGAJE
+	{ IPT_UI_CONFIGURE,         "Config Menu",       SEQ_DEF_4(KEYCODE_TAB, CODE_OR, JOYCODE_1_BUTTON11, JOYCODE_1_BUTTON3) },
+#else
 	{ IPT_UI_CONFIGURE,         "Config Menu",       SEQ_DEF_4(KEYCODE_TAB, CODE_OR, JOYCODE_1_BUTTON7, JOYCODE_1_BUTTON4) },
+#endif
 	{ IPT_UI_ON_SCREEN_DISPLAY, "On Screen Display", SEQ_DEF_1(KEYCODE_TILDE) },
+#ifdef OGA_TRNGAJE
+	{ IPT_UI_PAUSE,             "Pause",             SEQ_DEF_4(KEYCODE_P, CODE_OR, JOYCODE_1_BUTTON11, JOYCODE_1_BUTTON2) },
+#else	
 	{ IPT_UI_PAUSE,             "Pause",             SEQ_DEF_4(KEYCODE_P, CODE_OR, JOYCODE_1_BUTTON8, JOYCODE_1_BUTTON6) },
+#endif
 	{ IPT_UI_RESET_MACHINE,     "Reset Game",        SEQ_DEF_1(KEYCODE_F3) },
 	{ IPT_UI_SHOW_GFX,          "Show Gfx",          SEQ_DEF_1(KEYCODE_F4) },
 	{ IPT_UI_FRAMESKIP_DEC,     "Frameskip Dec",     SEQ_DEF_1(KEYCODE_F8) },
 	{ IPT_UI_FRAMESKIP_INC,     "Frameskip Inc",     SEQ_DEF_1(KEYCODE_F9) },
 	{ IPT_UI_THROTTLE,          "Throttle",          SEQ_DEF_1(KEYCODE_F10) },
+#ifdef OGA_TRNGAJE
+	{ IPT_UI_SHOW_FPS,          "Show FPS",          SEQ_DEF_8(KEYCODE_F11, CODE_NOT, KEYCODE_LCONTROL, CODE_NOT, KEYCODE_LSHIFT, CODE_OR, JOYCODE_1_BUTTON11, JOYCODE_1_BUTTON4) },
+#else
 	{ IPT_UI_SHOW_FPS,          "Show FPS",          SEQ_DEF_8(KEYCODE_F11, CODE_NOT, KEYCODE_LCONTROL, CODE_NOT, KEYCODE_LSHIFT, CODE_OR, JOYCODE_1_BUTTON7, JOYCODE_1_BUTTON3) },
+#endif
 	{ IPT_UI_SHOW_PROFILER,     "Show Profiler",     SEQ_DEF_2(KEYCODE_F11, KEYCODE_LSHIFT) },
 #ifdef MESS
 	{ IPT_UI_TOGGLE_UI,         "UI Toggle",         SEQ_DEF_1(KEYCODE_SCRLOCK) },
 #endif
+
+#ifdef OGA_TRNGAJE
+	{ IPT_UI_SNAPSHOT,          "Save Snapshot",     SEQ_DEF_4(KEYCODE_F12, CODE_OR, JOYCODE_1_BUTTON11, JOYCODE_1_BUTTON12) },
+#else
 	{ IPT_UI_SNAPSHOT,          "Save Snapshot",     SEQ_DEF_4(KEYCODE_F12, CODE_OR, JOYCODE_1_BUTTON8, JOYCODE_1_BUTTON5) },
+#endif
 	{ IPT_UI_TOGGLE_CHEAT,      "Toggle Cheat",      SEQ_DEF_1(KEYCODE_F5) },
+#ifdef OGA_TRNGAJE
+	{ IPT_UI_UP,                "UI Up",             SEQ_DEF_3(KEYCODE_UP, CODE_OR, JOYCODE_1_BUTTON7) },
+	{ IPT_UI_DOWN,              "UI Down",           SEQ_DEF_3(KEYCODE_DOWN, CODE_OR, JOYCODE_1_BUTTON8) },
+	{ IPT_UI_LEFT,              "UI Left",           SEQ_DEF_3(KEYCODE_LEFT, CODE_OR, JOYCODE_1_BUTTON9) },
+	{ IPT_UI_RIGHT,             "UI Right",          SEQ_DEF_3(KEYCODE_RIGHT, CODE_OR, JOYCODE_1_BUTTON10) },
+	{ IPT_UI_SELECT,            "UI Select",         SEQ_DEF_3(KEYCODE_ENTER, CODE_OR, JOYCODE_1_BUTTON2) },
+	{ IPT_UI_CANCEL,            "UI Cancel",         SEQ_DEF_4(KEYCODE_ESC, CODE_OR, JOYCODE_1_BUTTON11, JOYCODE_1_BUTTON16) },
+#else
 	{ IPT_UI_UP,                "UI Up",             SEQ_DEF_3(KEYCODE_UP, CODE_OR, JOYCODE_1_UP) },
 	{ IPT_UI_DOWN,              "UI Down",           SEQ_DEF_3(KEYCODE_DOWN, CODE_OR, JOYCODE_1_DOWN) },
 	{ IPT_UI_LEFT,              "UI Left",           SEQ_DEF_3(KEYCODE_LEFT, CODE_OR, JOYCODE_1_LEFT) },
 	{ IPT_UI_RIGHT,             "UI Right",          SEQ_DEF_3(KEYCODE_RIGHT, CODE_OR, JOYCODE_1_RIGHT) },
 	{ IPT_UI_SELECT,            "UI Select",         SEQ_DEF_3(KEYCODE_ENTER, CODE_OR, JOYCODE_1_BUTTON1) },
 	{ IPT_UI_CANCEL,            "UI Cancel",         SEQ_DEF_4(KEYCODE_ESC, CODE_OR, JOYCODE_1_BUTTON7, JOYCODE_1_BUTTON8) },
+#endif	
 	{ IPT_UI_PAN_UP,            "Pan Up",            SEQ_DEF_3(KEYCODE_PGUP, CODE_NOT, KEYCODE_LSHIFT) },
 	{ IPT_UI_PAN_DOWN,          "Pan Down",          SEQ_DEF_3(KEYCODE_PGDN, CODE_NOT, KEYCODE_LSHIFT) },
 	{ IPT_UI_PAN_LEFT,          "Pan Left",          SEQ_DEF_2(KEYCODE_PGUP, KEYCODE_LSHIFT) },
 	{ IPT_UI_PAN_RIGHT,         "Pan Right",         SEQ_DEF_2(KEYCODE_PGDN, KEYCODE_LSHIFT) },
+#ifdef OGA_TRNGAJE
+	{ IPT_START1, "1 Player Start",  SEQ_DEF_3(KEYCODE_1, CODE_OR, JOYCODE_1_BUTTON14) },
+#else
 	{ IPT_START1, "1 Player Start",  SEQ_DEF_3(KEYCODE_1, CODE_OR, JOYCODE_1_BUTTON8) },
+#endif
 	{ IPT_START2, "2 Players Start", SEQ_DEF_1(KEYCODE_2) },
 	{ IPT_START3, "3 Players Start", SEQ_DEF_1(KEYCODE_3) },
 	{ IPT_START4, "4 Players Start", SEQ_DEF_1(KEYCODE_4) },
+#ifdef OGA_TRNGAJE
+	{ IPT_COIN1,  "Coin 1",          SEQ_DEF_3(KEYCODE_5, CODE_OR, JOYCODE_1_BUTTON13) },
+#else
 	{ IPT_COIN1,  "Coin 1",          SEQ_DEF_3(KEYCODE_5, CODE_OR, JOYCODE_1_BUTTON7) },
+#endif
 	{ IPT_COIN2,  "Coin 2",          SEQ_DEF_1(KEYCODE_6) },
 	{ IPT_COIN3,  "Coin 3",          SEQ_DEF_1(KEYCODE_7) },
 	{ IPT_COIN4,  "Coin 4",          SEQ_DEF_1(KEYCODE_8) },
@@ -175,12 +230,22 @@ struct ipd inputport_defaults[] =
 	{ IPT_TILT,   "Tilt",            SEQ_DEF_0 },
 #endif
 
+#ifdef OGA_TRNGAJE
+	{ IPT_JOYSTICK_UP         | IPF_PLAYER1, "P1 Up",          SEQ_DEF_3(KEYCODE_UP, CODE_OR, JOYCODE_1_BUTTON7)    },
+	{ IPT_JOYSTICK_DOWN       | IPF_PLAYER1, "P1 Down",        SEQ_DEF_3(KEYCODE_DOWN, CODE_OR, JOYCODE_1_BUTTON8)  },
+	{ IPT_JOYSTICK_LEFT       | IPF_PLAYER1, "P1 Left",        SEQ_DEF_3(KEYCODE_LEFT, CODE_OR, JOYCODE_1_BUTTON9)  },
+	{ IPT_JOYSTICK_RIGHT      | IPF_PLAYER1, "P1 Right",       SEQ_DEF_3(KEYCODE_RIGHT, CODE_OR, JOYCODE_1_BUTTON10) },
+	{ IPT_BUTTON1             | IPF_PLAYER1, "P1 Button 1",    SEQ_DEF_5(KEYCODE_LCONTROL, CODE_OR, JOYCODE_1_BUTTON1, CODE_OR, JOYCODE_1_MOUSE1) },
+	{ IPT_BUTTON2             | IPF_PLAYER1, "P1 Button 2",    SEQ_DEF_5(KEYCODE_LALT, CODE_OR, JOYCODE_1_BUTTON2, CODE_OR, JOYCODE_1_MOUSE2) },	
+#else
 	{ IPT_JOYSTICK_UP         | IPF_PLAYER1, "P1 Up",          SEQ_DEF_3(KEYCODE_UP, CODE_OR, JOYCODE_1_UP)    },
 	{ IPT_JOYSTICK_DOWN       | IPF_PLAYER1, "P1 Down",        SEQ_DEF_3(KEYCODE_DOWN, CODE_OR, JOYCODE_1_DOWN)  },
 	{ IPT_JOYSTICK_LEFT       | IPF_PLAYER1, "P1 Left",        SEQ_DEF_3(KEYCODE_LEFT, CODE_OR, JOYCODE_1_LEFT)  },
 	{ IPT_JOYSTICK_RIGHT      | IPF_PLAYER1, "P1 Right",       SEQ_DEF_3(KEYCODE_RIGHT, CODE_OR, JOYCODE_1_RIGHT) },
 	{ IPT_BUTTON1             | IPF_PLAYER1, "P1 Button 1",    SEQ_DEF_5(KEYCODE_LCONTROL, CODE_OR, JOYCODE_1_BUTTON2, CODE_OR, JOYCODE_1_MOUSE1) },
-	{ IPT_BUTTON2             | IPF_PLAYER1, "P1 Button 2",    SEQ_DEF_5(KEYCODE_LALT, CODE_OR, JOYCODE_1_BUTTON1, CODE_OR, JOYCODE_1_MOUSE2) },
+	{ IPT_BUTTON2             | IPF_PLAYER1, "P1 Button 2",    SEQ_DEF_5(KEYCODE_LALT, CODE_OR, JOYCODE_1_BUTTON1, CODE_OR, JOYCODE_1_MOUSE2) },	
+#endif
+
 	{ IPT_BUTTON3             | IPF_PLAYER1, "P1 Button 3",    SEQ_DEF_5(KEYCODE_SPACE, CODE_OR, JOYCODE_1_BUTTON3, CODE_OR, JOYCODE_1_MOUSE3) },
 	{ IPT_BUTTON4             | IPF_PLAYER1, "P1 Button 4",    SEQ_DEF_3(KEYCODE_LSHIFT, CODE_OR, JOYCODE_1_BUTTON4) },
 	{ IPT_BUTTON5             | IPF_PLAYER1, "P1 Button 5",    SEQ_DEF_3(KEYCODE_Z, CODE_OR, JOYCODE_1_BUTTON5) },
