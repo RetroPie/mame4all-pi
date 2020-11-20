@@ -2527,7 +2527,7 @@ static INT32 ConfigureWatch (struct osd_bitmap *bitmap, INT32 selected, UINT8 wa
 static INT32 ChooseWatch (struct osd_bitmap *bitmap, INT32 selected)
 {
 	int sel;
-	static INT8 submenu_choice;
+	static INT8 submenu_choice = 0;
 	const char *menu_item[MAX_WATCHES + 2];
 	char buf[MAX_WATCHES][80];
 	const char *watchpoint_str = ui_getstring (UI_watchpoint);
