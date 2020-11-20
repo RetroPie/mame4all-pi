@@ -1011,7 +1011,7 @@ INLINE void asr_ix( void )
 	t = RM(EAD);
 	CLR_NZC;
 	CC |= (t & CC_C);
-	t=(t&0x80)|(t>>=1);
+	t=(t&0x80)|(t>>1);
 	SET_NZ8(t);
 	WM(EAD,t);
 }

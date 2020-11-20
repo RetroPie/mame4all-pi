@@ -12,7 +12,7 @@
 unsigned char *cop01_videoram;
 size_t cop01_videoram_size;
 
-static unsigned char cop01_scrollx[1];
+static unsigned char cop01_scrollx[2];
 static unsigned char spritebank = 0;
 static int flipscreen;
 

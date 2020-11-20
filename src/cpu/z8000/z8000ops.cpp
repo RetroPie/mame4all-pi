@@ -1785,7 +1785,7 @@ static void Z1C_ddN0_1001_0000_ssss_0000_nmin1(void)
     while (cnt-- >= 0) {
         WRMEM_W( idx, RW(src) );
 		idx = (idx + 2) & 0xffff;
-		src = ++src & 15;
+		src = (src + 1) & 15;
     }
 }
 
@@ -1802,7 +1802,7 @@ static void Z1C_ssN0_0001_0000_dddd_0000_nmin1(void)
 	while (cnt-- >= 0) {
 		RW(dst) = RDMEM_W( idx );
 		idx = (idx + 2) & 0xffff;
-		dst = ++dst & 15;
+		dst = (dst + 1) & 15;
     }
 }
 
@@ -3658,7 +3658,7 @@ static void Z5C_0000_0001_0000_dddd_0000_nmin1_addr(void)
 	GET_ADDR(OP2);
 	while (cnt-- >= 0) {
 		RW(dst) = RDMEM_W(addr);
-		dst = ++dst & 15;
+		dst = (dst + 1) & 15;
 		addr = (addr + 2) & 0xffff;
 	}
 }
@@ -3684,7 +3684,7 @@ static void Z5C_0000_1001_0000_ssss_0000_nmin1_addr(void)
 	GET_ADDR(OP2);
 	while (cnt-- >= 0) {
 		WRMEM_W( addr, RW(src) );
-		src = ++src & 15;
+		src = (src + 1) & 15;
 		addr = (addr + 2) & 0xffff;
 	}
 }
@@ -3714,7 +3714,7 @@ static void Z5C_ddN0_1001_0000_ssN0_0000_nmin1_addr(void)
 	addr += RW(dst);
 	while (cnt-- >= 0) {
 		WRMEM_W( addr, RW(src) );
-		src = ++src & 15;
+		src = (src + 1) & 15;
 		addr = (addr + 2) & 0xffff;
 	}
 }
@@ -3732,7 +3732,7 @@ static void Z5C_ssN0_0001_0000_dddd_0000_nmin1_addr(void)
 	addr += RW(src);
 	while (cnt-- >= 0) {
 		RW(dst) = RDMEM_W(addr);
-		dst = ++dst & 15;
+		dst = (dst + 1) & 15;
 		addr = (addr + 2) & 0xffff;
 	}
 }
