@@ -134,7 +134,7 @@
  *	DCP decrement data and compare
  ***************************************************************/
 #define DCP 													\
-	tmp = (UINT8)--tmp; 										\
+	tmp = (UINT8)tmp-1; 										\
 	P &= ~F_C;													\
 	if (A >= tmp)												\
 		P |= F_C;												\
@@ -150,7 +150,7 @@
  *	ISB increment and subtract with carry
  ***************************************************************/
 #define ISB 													\
-	tmp = (UINT8)++tmp; 										\
+	tmp = (UINT8)tmp+1; 										\
 	SBC
 
 /* 6510 ********************************************************
