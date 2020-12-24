@@ -96,6 +96,8 @@ static int surface_height;
 
 #define MAX_SAMPLE_RATE (44100*2)
 
+SDL_Joystick* myjoy[4];
+
 void gp2x_video_flip(void)
 {
     DisplayScreen();
@@ -119,7 +121,8 @@ extern void mouse_button_process(Uint8 button, SDL_bool pressed);
 unsigned long gp2x_joystick_read()
 {
     SDL_Event event;
-
+	//SDL_Joystick* joystick;
+	
 	//Reset mouse incase there is no motion
 	mouse_motion_process(0,0);
 
@@ -146,6 +149,22 @@ unsigned long gp2x_joystick_read()
 			case SDL_MOUSEBUTTONUP:
 				mouse_button_process(event.button.button, SDL_FALSE);
 				break;
+			case SDL_JOYDEVICEADDED:
+				//if (myjoy[0]==NULL)
+				{
+					printf("[trngaje] SDL_JOYDEVICEADDED=%d\n", event.jdevice.which);
+					myjoy[0]/*event.jdevice.which] */= SDL_JoystickOpen(0/*event.jdevice.which*/);
+				}
+				break;
+			case SDL_JOYDEVICEREMOVED:
+				printf("[trngaje] SDL_JOYDEVICEREMOVED=%d\n", event.jdevice.which);
+				{
+					SDL_Joystick* joystick;
+					joystick = SDL_JoystickFromInstanceID(0/*event.jdevice.which*/);
+					SDL_JoystickClose(joystick);
+					myjoy[0] = NULL;
+				}
+				break;	
 
 			default:
 				break;
@@ -193,7 +212,7 @@ void exitfunc()
 	gp2x_frontend_deinit();
 }
 
-SDL_Joystick* myjoy[4];
+
 
 int init_SDL(void)
 {
@@ -241,7 +260,7 @@ int init_SDL(void)
 	}
 #if 1
 //	SDL_EventState(SDL_ACTIVEEVENT,SDL_IGNORE);
-	SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
+	   //SDL_EventState(SDL_SYSWMEVENT,SDL_IGNORE);
 //	SDL_EventState(SDL_VIDEORESIZE,SDL_IGNORE);
 	SDL_EventState(SDL_USEREVENT,SDL_IGNORE);
 	SDL_ShowCursor(SDL_DISABLE);

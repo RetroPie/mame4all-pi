@@ -146,7 +146,10 @@ void seq_read_async_start(void);
 int seq_read_async(InputSeq* code, int first);
 
 /* NOTE: It's very important that this sequence is EXACLY long SEQ_MAX */
-#define SEQ_DEF_8(a,b,c,d,e,f,g,h) { a, b, c, d, e, f, g, h, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE }
+#define SEQ_DEF_11(a,b,c,d,e,f,g,h,i,j,k) { a, b, c, d, e, f, g, h, i, j, k, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE, CODE_NONE }
+#define SEQ_DEF_10(a,b,c,d,e,f,g,h,i,j) SEQ_DEF_11(a,b,c,d,e,f,g,h,i,j,CODE_NONE)
+#define SEQ_DEF_9(a,b,c,d,e,f,g,h,i) SEQ_DEF_10(a,b,c,d,e,f,g,h,i,CODE_NONE)
+#define SEQ_DEF_8(a,b,c,d,e,f,g,h) SEQ_DEF_9(a,b,c,d,e,f,g,h,CODE_NONE)
 #define SEQ_DEF_7(a,b,c,d,e,f,g) SEQ_DEF_8(a,b,c,d,e,f,g,CODE_NONE)
 #define SEQ_DEF_6(a,b,c,d,e,f) SEQ_DEF_7(a,b,c,d,e,f,CODE_NONE)
 #define SEQ_DEF_5(a,b,c,d,e) SEQ_DEF_6(a,b,c,d,e,CODE_NONE)
