@@ -18,10 +18,10 @@ VPATH=src $(wildcard src/cpu/*)
 # compiler, linker and utilities
 MD = @mkdir -p
 RM = rm -f
-CC  = gcc
-CPP = g++
-AS  = as
-STRIP = strip
+CC  ?= $(CROSS_COMPILE)gcc
+CXX ?= $(CROSS_COMPILE)g++
+AS  ?= $(CROSS_COMPILE)as
+STRIP ?= $(CROSS_COMPILE)strip
 
 EMULATOR = $(TARGET)$(EXE)
 
@@ -71,15 +71,15 @@ $(OBJ)/%.o: src/%.c
 
 $(OBJ)/%.o: src/%.cpp
 	@echo Compiling $<...
-	$(CPP) $(CDEFS) $(CFLAGS) -fno-rtti -c $< -o $@
+	$(CXX) $(CDEFS) $(CFLAGS) -fno-rtti -c $< -o $@
 
 $(OBJ)/%.o: src/%.s
 	@echo Compiling $<...
-	$(CPP) $(CDEFS) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CDEFS) $(CFLAGS) -c $< -o $@
 
 $(OBJ)/%.o: src/%.S
 	@echo Compiling $<...
-	$(CPP) $(CDEFS) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CDEFS) $(CFLAGS) -c $< -o $@
 
 $(sort $(OBJDIRS)):
 	$(MD) $@
