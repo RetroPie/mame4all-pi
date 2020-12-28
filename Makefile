@@ -34,16 +34,21 @@ HAS_PKGCONF := $(if $(shell which $(PKGCONF)),yes,no)
 ifeq ($(HAS_PKGCONF),yes)
   SDL_CFLAGS ?= $(shell $(PKGCONF) --cflags sdl)
   SDL_LIBS ?= $(shell $(PKGCONF) --libs sdl)
+  VCSM_CFLAGS ?= $(shell $(PKGCONF) --cflags vcsm)
+  VCSM_LIBS ?= $(shell $(PKGCONF) --libs vcsm)
 else
   SDL_CFLAGS ?= -I/usr/include/SDL
   SDL_LIBS ?= -lSDL
+  VCSM_CFLAGS ?= -I$(SDKSTAGE)/opt/vc/include
+  VCSM_LIBS ?= -L$(SDKSTAGE)/opt/vc/lib
 endif
 
 
 CFLAGS += -fsigned-char $(DEVLIBS) \
 	-Isrc -Isrc/$(MAMEOS) -Isrc/zlib \
 	$(SDL_CFLAGS) \
-	-I$(SDKSTAGE)/opt/vc/include -I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
+	$(VCSM_CFLAGS) \
+	-I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
 	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
 	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include \
 	-O3 -ffast-math -fno-builtin -fsingle-precision-constant \
@@ -52,7 +57,7 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 
 LDFLAGS = $(CFLAGS)
 
-LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) -L$(SDKSTAGE)/opt/vc/lib -lbcm_host -lbrcmGLESv2 -lbrcmEGL -lglib-2.0 -lasound
+LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) $(VCSM_LIBS) -lbcm_host -lbrcmGLESv2 -lbrcmEGL -lglib-2.0 -lasound
 
 OBJ = obj_$(TARGET)_$(MAMEOS)
 OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
