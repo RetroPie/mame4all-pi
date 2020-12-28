@@ -36,11 +36,15 @@ ifeq ($(HAS_PKGCONF),yes)
   SDL_LIBS ?= $(shell $(PKGCONF) --libs sdl)
   VCSM_CFLAGS ?= $(shell $(PKGCONF) --cflags vcsm)
   VCSM_LIBS ?= $(shell $(PKGCONF) --libs vcsm)
+  EGL_CFLAGS ?= $(shell $(PKGCONF) --cflags egl)
+  EGL_LIBS ?= $(shell $(PKGCONF) --libs egl)
 else
   SDL_CFLAGS ?= -I/usr/include/SDL
   SDL_LIBS ?= -lSDL
   VCSM_CFLAGS ?= -I$(SDKSTAGE)/opt/vc/include
   VCSM_LIBS ?= -L$(SDKSTAGE)/opt/vc/lib
+  EGL_CFLAGS ?= -I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads -I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux
+  EGL_LIBS ?= -lbcm_host -lbrcmGLESv2 -lbrcmEGL
 endif
 
 
@@ -48,8 +52,7 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	-Isrc -Isrc/$(MAMEOS) -Isrc/zlib \
 	$(SDL_CFLAGS) \
 	$(VCSM_CFLAGS) \
-	-I$(SDKSTAGE)/opt/vc/include/interface/vcos/pthreads \
-	-I$(SDKSTAGE)/opt/vc/include/interface/vmcs_host/linux \
+	$(EGL_CFLAGS) \
 	-I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include \
 	-O3 -ffast-math -fno-builtin -fsingle-precision-constant \
 	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow \
@@ -57,7 +60,7 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 
 LDFLAGS = $(CFLAGS)
 
-LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) $(VCSM_LIBS) -lbcm_host -lbrcmGLESv2 -lbrcmEGL -lglib-2.0 -lasound
+LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) $(VCSM_LIBS) $(EGL_LIBS) -lglib-2.0 -lasound
 
 OBJ = obj_$(TARGET)_$(MAMEOS)
 OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
