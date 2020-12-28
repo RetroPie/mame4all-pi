@@ -40,6 +40,8 @@ ifeq ($(HAS_PKGCONF),yes)
   EGL_LIBS ?= $(shell $(PKGCONF) --libs egl)
   GLIB_CFLAGS ?= $(shell $(PKGCONF) --cflags glib-2.0)
   GLIB_LIBS ?= $(shell $(PKGCONF) --libs glib-2.0)
+  ALSA_CFLAGS ?= $(shell $(PKGCONF) --cflags alsa)
+  ALSA_LIBS ?= $(shell $(PKGCONF) --libs alsa)
 else
   SDL_CFLAGS ?= -I/usr/include/SDL
   SDL_LIBS ?= -lSDL
@@ -49,6 +51,8 @@ else
   EGL_LIBS ?= -lbcm_host -lbrcmGLESv2 -lbrcmEGL
   GLIB_CFLAGS ?= -I/usr/include/glib-2.0 -I/usr/lib/arm-linux-gnueabihf/glib-2.0/include
   GLIB_LIBS ?= -lglib-2.0
+  ALSA_CFLAGS ?=
+  ALSA_LIBS ?= -lasound
 endif
 
 
@@ -58,13 +62,14 @@ CFLAGS += -fsigned-char $(DEVLIBS) \
 	$(VCSM_CFLAGS) \
 	$(EGL_CFLAGS) \
 	$(GLIB_CFLAGS) \
+	$(ALSA_CFLAGS) \
 	-O3 -ffast-math -fno-builtin -fsingle-precision-constant \
 	-Wall -Wno-sign-compare -Wunused -Wpointer-arith -Wcast-align -Waggregate-return -Wshadow \
 	-Wno-narrowing
 
 LDFLAGS = $(CFLAGS)
 
-LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) $(VCSM_LIBS) $(EGL_LIBS) $(GLIB_LIBS) -lasound
+LIBS = -lm -ldl -lpthread -lrt $(SDL_LIBS) $(VCSM_LIBS) $(EGL_LIBS) $(GLIB_LIBS) $(ALSA_LIBS)
 
 OBJ = obj_$(TARGET)_$(MAMEOS)
 OBJDIRS = $(OBJ) $(OBJ)/cpu $(OBJ)/sound $(OBJ)/$(MAMEOS) \
