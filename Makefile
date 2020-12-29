@@ -21,7 +21,6 @@ RM = rm -f
 CC  = gcc
 CPP = g++
 AS  = as
-LD  = gcc
 STRIP = strip
 
 EMULATOR = $(TARGET)$(EXE)
@@ -61,7 +60,7 @@ include src/$(MAMEOS)/$(MAMEOS).mak
 CDEFS = $(DEFS) $(COREDEFS) $(CPUDEFS) $(SOUNDDEFS)
 
 $(EMULATOR): $(COREOBJS) $(OSOBJS) $(DRVOBJS)
-	$(LD) $(LDFLAGS) $(COREOBJS) $(OSOBJS) $(LIBS) $(DRVOBJS) -o $@
+	$(CC) $(LDFLAGS) $(COREOBJS) $(OSOBJS) $(LIBS) $(DRVOBJS) -o $@
 	$(STRIP) $(EMULATOR)	
 
 $(OBJ)/%.o: src/%.c
