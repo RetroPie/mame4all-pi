@@ -589,11 +589,15 @@ extern volatile unsigned short gp2x_palette[512];
 
 void DisplayScreen(void)
 {
+	int w, h;
+	w = go2_display_height_get(go2_display);
+	h = go2_display_width_get(go2_display);
+
 	//printf("[trngaje] DisplayScreen++\n");
-    //Draw to the screen
+	//Draw to the screen
   	gles2_draw(rpi_screen, surface_width, surface_height);
 
-    eglSwapBuffers(display, surface);		
+	eglSwapBuffers(display, surface);
 
 	if (ucbpp==8)
 	{
@@ -623,7 +627,7 @@ void DisplayScreen(void)
 	go2_presenter_post(go2_presenter,
 				go2_surface/*gles_surface*/, //go2_surface
 				0, 0, surface_width, surface_height,
-				0, 0, 320, 480,
+				0, 0, h/*320*/, w/*480*/,
 				GO2_ROTATION_DEGREES_270);
 	//go2_context_surface_unlock(go2_context3D, gles_surface);
 
@@ -715,7 +719,11 @@ void gp2x_frontend_deinit(void)
 void FE_DisplayScreen(void)
 {
 	printf("[trngaje] FE_DisplayScreen++\n");
-	
+
+	int w, h;
+	w = go2_display_height_get(go2_display);
+	h = go2_display_width_get(go2_display);
+
 	uint16_t* src = (uint16_t *)gp2x_screen15;
 	uint16_t* dst = (uint16_t *)go2_surface_map(go2_surface);
 	for (int i=0; i< (surface_width * surface_height); i++)
@@ -723,16 +731,15 @@ void FE_DisplayScreen(void)
 		*dst = (uint16_t) *src;
 		dst++;
 		src++;
-	}	
-		
-	
+	}
+
 #if 1	
 	//go2_surface_t* gles_surface = go2_context_surface_lock(go2_context3D);
 	
 	go2_presenter_post(go2_presenter,
 				go2_surface,
 				0, 0, surface_width, surface_height,
-				0, 0, 320, 480,
+				0, 0, h, w,
 				GO2_ROTATION_DEGREES_270);
 	//go2_context_surface_unlock(go2_context3D, gles_surface);	
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		
