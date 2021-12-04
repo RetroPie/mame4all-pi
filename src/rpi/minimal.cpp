@@ -81,6 +81,7 @@ unsigned long gp2x_joystick_read()
 				break;
 		}
 	}
+	return 0;
 }
 
 void gp2x_sound_volume(int l, int r)
